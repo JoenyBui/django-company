@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block navagation_link %}
+{% endblock %}
+
+{% block content %}
+<section id="main_body">
+    <div class="container">
+        <div class="jumbotron">
+            <div class="container-fluid">
+                <div class="row">
+
+                    {% block form_content %}
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block modal_html %}
+{% endblock %}
+
+{% block additional_script %}
+{% endblock %}
