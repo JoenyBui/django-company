@@ -41,15 +41,15 @@ class CompanySerializer(serializers.Serializer):
     """
     Window analysis module input file serializer.
     """
-    public_id = serializers.UUIDField(default=uuid.uuid4)
+    public_id = serializers.UUIDField(default=uuid.uuid4, read_only=True)
 
     name = serializers.CharField(max_length=255)
     street = serializers.CharField(max_length=100)
     city = serializers.CharField(max_length=100)
-    state = serializers.CharField(max_length=2)
+    state = serializers.CharField(max_length=100)
     zipcode = serializers.IntegerField(default=12345)
-    website = serializers.URLField(allow_blank=True)
-    picture = serializers.ImageField()
+    website = serializers.URLField(allow_blank=True, allow_null=True, required=False)
+    picture = serializers.ImageField(allow_empty_file=True, use_url=False)
 
     def to_representation(self, instance):
         ret = super(CompanySerializer, self).to_representation(instance)
@@ -62,47 +62,37 @@ class CompanySerializer(serializers.Serializer):
 
         User must provide a valid folder UUID.
         """
-        folder_id = validated_data.get('folder_id')
         name = validated_data.get('name')
-        data = validated_data.get('data')
-        file = validated_data.get('file')
-        public_id = validated_data.get('public_id')
+        street = validated_data.get('street')
+        city = validated_data.get('city')
+        state = validated_data.get('state')
+        zipcode = validated_data.get('zipcode')
+        website = validated_data.get('website')
+        # picture = validated_data.get('picture')
 
-        try:
-            folder = Company.objects.filter(public_id=folder_id).first()
-        except ObjectDoesNotExist as e:
-            folder = None
-
-        if folder:
-            user = self.context['request'].user
-
-            return Company.objects.create(name=name,
-                                           public_id=public_id,
-                                           user=user,
-                                           folder=folder,
-                                           data=data,
-                                           file=file)
-        else:
-            return None
+        return Company.objects.create(name=name, street=street, city=city, state=state, zipcode=zipcode, website=website)
 
 
 class EmployeeSerializer(serializers.Serializer):
     """
     Window analysis module input file serializer.
     """
-    public_id = serializers.UUIDField(default=uuid.uuid4)
+    public_id = serializers.UUIDField(default=uuid.uuid4, read_only=True)
     company_id = serializers.UUIDField()
     user_id = serializers.UUIDField()
 
     privilege = serializers.IntegerField(default=1)
 
     def to_representation(self, instance):
-        ret = super(Employee, self).to_representation(instance)
+        ret = super(EmployeeSerializer, self).to_representation(instance)
 
-        if instance.folder:
-            ret["folder_id"] = instance.folder.public_id
+        if not ret:
+            return None
+
+        if instance.company:
+            ret["company_id"] = instance.company.public_id
         else:
-            ret["folder_id"] = None
+            ret["company_id"] = None
 
         return ret
 
@@ -114,7 +104,6 @@ class EmployeeSerializer(serializers.Serializer):
         """
         company_id = validated_data.get('company_id')
         user_id = validated_data.get('user_id')
-        public_id = validated_data.get('public_id')
 
         try:
             company = Company.objects.filter(public_id=company_id).first()

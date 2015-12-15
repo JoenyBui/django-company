@@ -23,22 +23,27 @@ from django.conf import settings
 from django.core.mail import send_mail, mail_admins, EmailMessage
 
 from .models import Company, Employee
-
+from .models import get_user_company
 
 __author__ = 'jbui'
 
 
 class CompanyTestCase(TestCase):
     """
-
+    Company Test Case
     """
     def setUp(self):
-        self.c1 = Company.objects.create(name='C1')
-        self.c2 = Company.objects.create(name='C2')
-
         self.u1 = User.objects.create_user(username='test1', password='password')
         self.u2 = User.objects.create_user(username='test2', password='password')
         self.u3 = User.objects.create_user(username='test3', password='password')
+        self.u4 = User.objects.create_user(username='test4', password='password')
+
+        self.c1 = Company.objects.create(name='Company 1')
+        self.c2 = Company.objects.create(name='Company 2')
+
+        self.e1 = Employee.objects.create(user=self.u1, company=self.c1)
+        self.e2 = Employee.objects.create(user=self.u2, company=self.c2)
+        self.e3 = Employee.objects.create(user=self.u3)
 
     def test_address(self):
         self.c1.street = '3401 S. Lamar Blvd'
@@ -62,6 +67,12 @@ class CompanyTestCase(TestCase):
         self.c1.remove_employee(username='test1')
         self.assertEqual(len(self.c1.employee_set.all()), 0)
 
+    def test_user_company(self):
+        self.assertEqual(get_user_company(self.u1), self.c1)
+        self.assertEqual(get_user_company(self.u2), self.c2)
+        self.assertEqual(get_user_company(self.u3), None)
+        self.assertEqual(get_user_company(self.u4), None)
+
     def test_change_employee_privilege(self):
         pass
 
@@ -79,6 +90,9 @@ class EmployeeTestCase(TestCase):
 
 
 class EmailTestCase(TestCase):
+    """
+
+    """
     def setUp(self):
         pass
 

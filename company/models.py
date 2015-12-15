@@ -32,7 +32,7 @@ from rest_framework.authtoken.models import Token
 
 from mptt.models import MPTTModel
 
-from . import USER_PRIVELAGE
+from . import USER_PRIVELAGE, USER_NONE, USER_COMPANY_ADMIN, USER_READONLY, USER_WORKER
 
 # Create your models here.
 
@@ -46,7 +46,7 @@ class Company(models.Model):
 
     street = models.CharField(max_length=100, default='')
     city = models.CharField(max_length=100, default='')
-    state = models.CharField(max_length=2, default='')
+    state = models.CharField(max_length=10, default='')
     zipcode = models.IntegerField(default=0)
 
     website = models.URLField(blank=True)
@@ -83,7 +83,7 @@ class Company(models.Model):
 
     def change_employee_privilege(self, username, privilege):
         """
-
+        Change employee privilege
         :param username:
         :param privilege:
         """
@@ -107,7 +107,7 @@ class Employee(models.Model):
     Privilege is given to the user through the company administrative.
     """
     public_id = models.UUIDField(default=uuid.uuid4, editable=False)
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company, default=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     privilege = models.IntegerField(default=1, choices=USER_PRIVELAGE)
 
@@ -115,11 +115,15 @@ class Employee(models.Model):
         return self.company.name + " " + self.user.username
 
     def accept_company(self):
+        """
+        Accept company invitation.
+        :return:
+        """
         pass
 
     def request_privilege(self):
         """
-
+        Request new privilege.
         :return:
         """
         pass
@@ -128,4 +132,10 @@ class Employee(models.Model):
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
-        Token.objects.create(user=instance)
+        tk = Token.objects.create(user=instance)
+        tk.save()
+
+
+def get_user_company(user):
+    if Employee.objects.get(user=user):
+        pass

@@ -20,7 +20,7 @@ from company.models import Company, Employee
 
 
 class EmployeeProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'privilege', 'company')
+    list_display = ('public_id', 'user', 'privilege', 'company')
 
 
 class EmployeeInline(admin.TabularInline):
@@ -29,7 +29,7 @@ class EmployeeInline(admin.TabularInline):
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id', 'street', 'city', 'state', 'zipcode')
+    list_display = ('name', 'public_id', 'street', 'city', 'state', 'zipcode')
     fieldsets = [
         (
             None, {
