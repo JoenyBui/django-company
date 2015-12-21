@@ -137,5 +137,14 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 def get_user_company(user):
+    """
+    Get the company of the user if give one.
+    :param user:
+    :return:
+    """
     if Employee.objects.get(user=user):
-        pass
+        employee = Employee.objects.get(user=user)
+
+        return employee.company
+    else:
+        return None
