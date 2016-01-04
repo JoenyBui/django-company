@@ -8,6 +8,41 @@ This project is a django application to model a company/employee relationship gi
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
+### Branch ###
+* master
+main branch where the source code of HEAD always reflect a production-ready state
+
+* develop
+main branch where the source code of HEAD always reflects a state where the latest development changes for the next release
+
+* feature branches
+used to develop new features for the upcoming or a distant future release
+** May branch off from: 
+develop
+** Must merge back into:
+develop
+** Branch naming convention:
+anything except master, develop, release-*, or hotfix-*
+
+* Release branches
+support preparation of a new production release
+** May branch off from:
+develop
+** Must merge back into:
+develop and master
+** Branch naming convention:
+release-*
+
+* Hotfix
+much like release branches in that they are also meant to prepare for a new production
+** May branch off from:
+master
+** Must merge back into:
+develop and master
+** Branching naming convention:
+hotfix-*
+
+
 ### How do I get set up? ###
 
 * Summary of set up
