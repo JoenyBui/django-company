@@ -79,7 +79,7 @@ class EmployeeSerializer(serializers.Serializer):
     """
     public_id = serializers.UUIDField(default=uuid.uuid4, read_only=True)
     company_id = serializers.UUIDField()
-    user_id = serializers.UUIDField()
+    # user_id = serializers.UUIDField()
 
     privilege = serializers.IntegerField(default=1)
 
@@ -103,7 +103,7 @@ class EmployeeSerializer(serializers.Serializer):
         User must provide a valid folder UUID.
         """
         company_id = validated_data.get('company_id')
-        user_id = validated_data.get('user_id')
+        public_id = validated_data.get('public_id')
 
         try:
             company = Company.objects.filter(public_id=company_id).first()
@@ -111,7 +111,7 @@ class EmployeeSerializer(serializers.Serializer):
             company = None
 
         try:
-            user = User.objects.filter(public_id=user_id).first()
+            user = User.objects.filter(public_id=public_id).first()
         except ObjectDoesNotExist as e:
             user = None
 

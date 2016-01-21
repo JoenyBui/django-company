@@ -37,7 +37,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     # filter_fields = ('first_name', 'last_name', 'date_joined')
 
 
-class CompanyViewSet(viewsets.ModelViewSet):
+class CompanyViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Company API viewset.
     """
@@ -45,11 +45,21 @@ class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
     permission_classes = (permissions.IsAuthenticated, )
 
+    # def get_queryset(self):
+    #     user = self.request.user
+    #
+    #     return Employee.objects.filter(user=user)[0].company
 
-class EmployeeViewSet(viewsets.ModelViewSet):
+
+class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Employee API viewset.
     """
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     permission_classes = (permissions.IsAuthenticated, )
+
+    def get_queryset(self):
+        user = self.request.user
+
+        return Employee.objects.filter(user=user)[0].company.employee_set.all()

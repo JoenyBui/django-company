@@ -39,4 +39,6 @@ urlpatterns = [
     url(r'^', include('company.api')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^accounts/', include('registration.backends.default.urls', namespace='accounts')),
+
+    url(r'helpdesk/', include('helpdesk.urls')),
 ]
