@@ -1,19 +1,3 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
 
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
@@ -112,6 +96,7 @@ class ProfileView(View):
 class CompanyView(View):
     """
     Company view.
+
     """
 
     def get(self, request):
@@ -157,6 +142,7 @@ class CompanyView(View):
     def post(self, request):
         """
         Submit the administration.
+
         :param request:
         :return:
         """
@@ -238,6 +224,9 @@ class EmployeeCreateView(CreateView):
         Called if all forms are valid. Creates a Recipe instance along with
         associated Ingredients and Instructions and then redirects to a
         success page.
+
+        :param form:
+        :param employee_set:
         """
         self.object = form.save()
 
@@ -250,7 +239,13 @@ class EmployeeCreateView(CreateView):
         """
         Called if a form is invalid. Re-renders the context data with the
         data-filled forms and errors.
+
+        :param form:
+        :param employee_set:
         """
         return self.render_to_response(
-            self.get_context_data(form=form,
-                                  employee_set=employee_set))
+            self.get_context_data(
+                form=form,
+                employee_set=employee_set
+            )
+        )

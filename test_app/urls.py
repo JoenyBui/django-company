@@ -41,4 +41,5 @@ urlpatterns = [
     url(r'^accounts/', include('registration.backends.default.urls', namespace='accounts')),
 
     url(r'helpdesk/', include('helpdesk.urls')),
+    url(r'^messages/', include('postman.urls', namespace='postman', app_name='postman'))
 ]
