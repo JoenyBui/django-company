@@ -1,6 +1,7 @@
-
-# Create your models here.
-import os, sys, datetime, json
+import os
+import sys
+import datetime
+import json
 import uuid
 
 from django.db import models
@@ -8,9 +9,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from rest_framework.authtoken.models import Token
 
@@ -113,22 +111,20 @@ class Employee(models.Model):
         pass
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        tk = Token.objects.create(user=instance)
-        tk.save()
-
-
 def get_user_company(user):
     """
     Get the company of the user if give one.
+
     :param user:
     :return:
     """
-    if Employee.objects.get(user=user):
-        employee = Employee.objects.get(user=user)
+    if user.employee_set.all():
+        # User is an employee.
+        if Employee.objects.get(user=user):
+            employee = Employee.objects.get(user=user)
 
-        return employee.company
+            return employee.company
+        else:
+            return None
     else:
         return None
