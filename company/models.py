@@ -1,22 +1,7 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
-
-# Create your models here.
-import os, sys, datetime, json
+import os
+import sys
+import datetime
+import json
 import uuid
 
 from django.db import models
@@ -24,9 +9,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from rest_framework.authtoken.models import Token
 
@@ -129,22 +111,20 @@ class Employee(models.Model):
         pass
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        tk = Token.objects.create(user=instance)
-        tk.save()
-
-
 def get_user_company(user):
     """
     Get the company of the user if give one.
+
     :param user:
     :return:
     """
-    if Employee.objects.get(user=user):
-        employee = Employee.objects.get(user=user)
+    if user.employee_set.all():
+        # User is an employee.
+        if Employee.objects.get(user=user):
+            employee = Employee.objects.get(user=user)
 
-        return employee.company
+            return employee.company
+        else:
+            return None
     else:
         return None

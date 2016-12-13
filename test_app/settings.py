@@ -62,6 +62,12 @@ INSTALLED_APPS = (
 
     'registration',
 
+    'django.contrib.humanize',
+    'markdown_deux',
+    'bootstrapform',
+    'helpdesk',
+    'postman',
+
     'company',
 )
 

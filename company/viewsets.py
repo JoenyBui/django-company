@@ -1,19 +1,3 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
 
 from django.contrib.auth.models import User, Group
 
@@ -37,7 +21,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     # filter_fields = ('first_name', 'last_name', 'date_joined')
 
 
-class CompanyViewSet(viewsets.ModelViewSet):
+class CompanyViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Company API viewset.
     """
@@ -45,11 +29,21 @@ class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
     permission_classes = (permissions.IsAuthenticated, )
 
+    # def get_queryset(self):
+    #     user = self.request.user
+    #
+    #     return Employee.objects.filter(user=user)[0].company
 
-class EmployeeViewSet(viewsets.ModelViewSet):
+
+class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Employee API viewset.
     """
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     permission_classes = (permissions.IsAuthenticated, )
+
+    def get_queryset(self):
+        user = self.request.user
+
+        return Employee.objects.filter(user=user)[0].company.employee_set.all()

@@ -1,19 +1,3 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
 
 import uuid
 
@@ -79,7 +63,7 @@ class EmployeeSerializer(serializers.Serializer):
     """
     public_id = serializers.UUIDField(default=uuid.uuid4, read_only=True)
     company_id = serializers.UUIDField()
-    user_id = serializers.UUIDField()
+    # user_id = serializers.UUIDField()
 
     privilege = serializers.IntegerField(default=1)
 
@@ -103,7 +87,7 @@ class EmployeeSerializer(serializers.Serializer):
         User must provide a valid folder UUID.
         """
         company_id = validated_data.get('company_id')
-        user_id = validated_data.get('user_id')
+        public_id = validated_data.get('public_id')
 
         try:
             company = Company.objects.filter(public_id=company_id).first()
@@ -111,7 +95,7 @@ class EmployeeSerializer(serializers.Serializer):
             company = None
 
         try:
-            user = User.objects.filter(public_id=user_id).first()
+            user = User.objects.filter(public_id=public_id).first()
         except ObjectDoesNotExist as e:
             user = None
 
