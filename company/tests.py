@@ -30,7 +30,7 @@ class CompanyTestCase(TestCase):
         self.e3 = Employee.objects.create(user=self.u3)
 
     def test_address(self):
-        self.c1.street = '3401 S. Lamar Blvd'
+        self.c1.street = '3409 S. Lamar Blvd'
         self.c1.city = 'Austin'
         self.c1.state = 'TX'
         self.c1.zipcode = 78704
@@ -99,28 +99,4 @@ class EmailTestCase(TestCase):
         )
 
         self.assertTrue(send_mail('Subject here', 'Here is the message.',
-                                  'ralberson@protection-consultants.com', recipients, fail_silently=False))
-
-    def test_smtp(self):
-        # server = 'intranet.protection-consultants.com'
-        server = '10.71.62.9'
-        # recipients = ['jbui@protection-consultants.com']
-
-        recipients = ['joeny.bui@gmail.com']
-        # sender = 'ralberson@protection-consultants.com'
-        sender = 'support@protection-consultants.com'
-        message = """
-        Subject: SMTP e-mail test
-
-        This is a test e-mail message.
-        """
-
-        session = smtplib.SMTP(server, 25)
-        session.ehlo()
-        session.starttls()
-        session.ehlo()
-        print(session.login(user='support', password='Protection2015!'))
-
-        self.assertTrue(session.sendmail(sender, recipients, message))
-
-        session.close()
+                                  'joeny.bui@gmail.com', recipients, fail_silently=False))

@@ -1,6 +1,9 @@
 # README #
 
-This project is a django application to model a company/employee relationship given a list of privilege and application rights.  The model for the company is that the user won't have access to anything that the company doesn't have access too.
+This project is a django application to model a company/employee 
+relationship given a list of privilege and application rights.  The 
+model for the company is that the user won't have access to anything 
+that the company doesn't have access too.
 
 ### What is this repository for? ###
 
